@@ -38,9 +38,18 @@ def complete(id):
 
     return redirect(url_for('index')
 
-@app.route('/add', methods=['POST'])
+
+@app.route('/update', methods=['POST'])
+def update():
+	todo = Todo.query.filter_by(id=int(id)).first()
+        todo.session.update(todo)
+        db.session.commit()
+        return redirect(url_for('index'))
+
+
+@app.route('/delete', methods=['POST'])
 def delete():
-        todo = Todo(text=request.form['todoitem'], complete=False)
+        todo = Todo.query.filter_by(id=int(id)).first()
         db.session.delete(todo)
         db.session.commit()
         return redirect(url_for('index'))
