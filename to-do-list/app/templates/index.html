@@ -1,6 +1,9 @@
-<html>
-<body>
-<h1>Todo List</h1>  
+{% for todo in all_todo}
 
-</body>
-</html>
+{{todo.incomplete}} <br>
+{{todo.complete}} <br><br>  
+&#9989
+
+{{% endif %}}
+
+{{% endfor %}}
