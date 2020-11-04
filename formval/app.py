@@ -19,20 +19,22 @@ class UserCheck:
 
 class CharacterCheck:
         def __init__(self, banned, message=None):
-        self.banned = banned
-        if not message:
-            message = 'Special characters are not allowed'
-        self.message = message
+            self.banned = banned
+            if not message:
+               message = 'Special characters are not allowed'
+            self.message = message
 
         def __call__(self, form, field):
-        if field.data.isalphanum() = False:
-            raise ValidationError(self.message)
+            for letter in field.data:
+                for char in self.banned:
+                    if letter == char:
+                        raise ValidationError(self.message)
 
 class myForm(FlaskForm):
     username = StringField('Username', validators=[
         DataRequired(),
-        UserCheck(message="custom rejection message",banned = ['root','admin','sys']),
-        CharacterCheck(message="custom rejection message",banned = ['~','!','@','#','$','%','^','&','*','(',')','-','_','+','=','{','}','[',']','/',':',';',',','.','<','>','?'])
+        UserCheck(message="Please choose another username",banned = ['root','admin','sys']),
+        CharacterCheck(message="Special characters are not allowed",banned = ['~','!','@','#','$','%','^','&','*','(',')','-','_','+','=','{','}','[',']','/',':',';',',','.','<','>','?']),
         Length(min=2,max=15)
         ])
     submit = SubmitField('Sign up')
