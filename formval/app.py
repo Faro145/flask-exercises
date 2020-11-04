@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY']='SOME_KEY'
 
 class UserCheck:
-    def __init__(self, banned, message=None):# Here we set up the class to have the banned and message attributes. banned must be passed through at declaration.
+    def __init__(self, banned, message=None):
         self.banned = banned
         if not message:
             message = 'Please choose another username'
@@ -17,10 +17,22 @@ class UserCheck:
         if field.data.lower() in (word.lower() for word in self.banned):
             raise ValidationError(self.message)
 
+class CharacterCheck:
+        def __init__(self, banned, message=None):
+        self.banned = banned
+        if not message:
+            message = 'Special characters are not allowed'
+        self.message = message
+
+        def __call__(self, form, field):
+        if field.data.isalphanum() = False:
+            raise ValidationError(self.message)
+
 class myForm(FlaskForm):
     username = StringField('Username', validators=[
         DataRequired(),
         UserCheck(message="custom rejection message",banned = ['root','admin','sys']),
+        CharacterCheck(message="custom rejection message",banned = ['~','!','@','#','$','%','^','&','*','(',')','-','_','+','=','{','}','[',']','/',':',';',',','.','<','>','?'])
         Length(min=2,max=15)
         ])
     submit = SubmitField('Sign up')
