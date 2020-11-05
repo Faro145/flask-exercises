@@ -2,27 +2,26 @@ from flask import render_template, request, redirect, url_for
 from app import app
 from app.models import Todo
 from app import db
+from app.forms import todoForm
 
 @app.route('/')
 def index():
-        all_todo = Todo.query.all()
-	incomplete = Todo.query.filter_by(complete=False).all()
-	complete = Todo.query.filter_by(complete=True).all()
+    all_todo = Todo.query.all()
+    incomplete = Todo.query.filter_by(complete=False).all()
+    complete = Todo.query.filter_by(complete=True).all()
+    return render_template('index.html', all_todo=all_todo, incomplete=incomplete, complete=complete)
 
-	return render_template('index.html', all_todo=all_todo, incomplete=incomplete, complete=complete)
-
-
-@app.route('/add', methods=['POST'])
+@app.route('/add', methods=['GET', 'POST'])
 def add():
-        form = TaskForm9)
-        if form.validate_on_submit():
-	todo = Todo(text=request.form['todoitem'], complete=False)
-	db.session.add(todo)
-	db.session.commit()
-        return
-	return redirect(url_for('index'))
+    form = todoForm()
+    if form.validate_on_submit():
+        new_todo = Todo(task=form.task.data)
+        db.session.add(todo)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('add.html',form=form)
 
-@app.route('/incomplete/<id>')
+@app.route('/incomplete/<int:todo_id>')
 def incomplete(id):
 
     todo = Todo.query.filter_by(id=int(id)).first()
@@ -31,7 +30,7 @@ def incomplete(id):
     return redirect(url_for('index')
 
 
-@app.route('/complete/<id>')
+@app.route('/complete/<int:todo_id>')
 def complete(id):
 
     todo = Todo.query.filter_by(id=int(id)).first()
