@@ -3,11 +3,28 @@
 
 {% for todo in all_todo}
 
-{{todo.incomplete}} <br>
-{{if todo.complete}}  
+{{todo.text}}
+{{if todo.complete}}
 &#9989
-
-{{% endif %}} <br><br>
+{{% endif %}} 
+<br>
+{% if todo.complete %}
+<form action='{{ url_for('incomplete'), id=todo.id) }}'> 
+        <button>Incomplete</button>
+{% else %}
+<form action='{{ url_for('complete'), id=todo.id) }}'>
+        <button>Complete</button>
+</form>
+{% endif %}
+<div>
+<form action='{{ url_for('update', id=todo.id) }}'>
+        <button>Update<button>
+</form>
+<form action='{{ url_for('delete, id=todo.id') }}'>
+        <button>Delete</button>
+</form>
+</div> 
+<br><br>
 
 {{% endfor %}}
 

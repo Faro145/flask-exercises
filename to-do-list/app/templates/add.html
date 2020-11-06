@@ -5,9 +5,9 @@
 
 <form method='POST' action=''>
          {{ form.hidden_tag() }}
-         {{ form.task.label}} {{ form.task}}
-         {% if form.task.errors %}
-                 {% for error in from.task.error %}
+         {{ form.text.label}} {{ form.text}}
+         {% if form.text.errors %}
+                 {% for error in from.text.error %}
                          {{ error }}
                  {% endfor %}
          {% endif %}        
